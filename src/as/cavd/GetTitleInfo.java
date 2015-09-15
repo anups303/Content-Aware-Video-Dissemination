@@ -31,7 +31,7 @@ import com.google.api.client.googleapis.media.MediaHttpDownloader;
 //import com.google.api.client.googleapis.media.MediaHttpDownloaderProgressListener;
 import com.google.common.collect.Lists;
 
-public class GetTitle {
+public class GetTitleInfo {
 	
 	private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 	
@@ -45,13 +45,31 @@ public class GetTitle {
 	//Used to make YouTube Data API requests
 	private static YouTube youtube;
 	
-	public static void main(String[] args) {
+	private static String videoId;
+	
+	private String title, desc, category;
+	
+	public String getTitle() {
+		return title;
+	}
+	
+	public String getDesc() {
+		return desc;
+	}
+	
+	public String getCategory() {
+		return category;
+	}
+	
+//	public static void main(String[] args) {
+	public GetTitleInfo(String videoId) {
 		
+		this.videoId = videoId;
 		List<String> scopes = Lists.newArrayList("https://www.googleapis.com/auth/youtube.force-ssl");
 		//read developer key from properties file
 		Properties properties = new Properties();
 		try {
-            InputStream in = GetTitle.class.getResourceAsStream("/" + PROPERTIES_FILENAME);
+            InputStream in = GetTitleInfo.class.getResourceAsStream("/" + PROPERTIES_FILENAME);
             properties.load(in);
         } catch (IOException e) {
             System.err.println("There was an error reading " + PROPERTIES_FILENAME + ": " + e.getCause() + " : " + e.getMessage());
@@ -68,7 +86,7 @@ public class GetTitle {
 			String apiKey = properties.getProperty("youtube.apikey");
 			
 			//prompt for video id
-			String videoId = getVideoIdFromUser();
+			//String videoId = getVideoIdFromUser();
 			
 			//retrieve resources representing specified videos
 			YouTube.Videos.List listVideosRequest = youtube.videos().list("snippet").setId(videoId);
@@ -76,10 +94,6 @@ public class GetTitle {
 			VideoListResponse listResponse = listVideosRequest.execute();
 			
 			List<Video> videoList = listResponse.getItems();
-//			if(videoList.isEmpty()) {
-//				System.out.println("Can't find video with ID: " + videoId);
-//				return;
-//			}
 			
 			Video video = videoList.get(0);
 			VideoSnippet snippet = video.getSnippet();
@@ -88,31 +102,20 @@ public class GetTitle {
 			YouTube.VideoCategories.List listCategoriesRequest = youtube.videoCategories().list("snippet").setId(categoryId);
 			listCategoriesRequest.setKey(apiKey);
 			VideoCategoryListResponse categoryListResponse = listCategoriesRequest.execute();
+//			System.out.println(categoryListResponse);
 			
 			List<VideoCategory> categoryList = categoryListResponse.getItems();
 			
 			VideoCategory category = categoryList.get(0);
 			VideoCategorySnippet categorySnippet = category.getSnippet();
 			
-			/*YouTube.Captions.List listCaptions = youtube.captions().list("snippet", videoId);
-			listCaptions.setKey(apiKey);
-			CaptionListResponse captionListResponse = listCaptions.execute();
-			
-			List<Caption> captions = captionListResponse.getItems();*/
-//			System.out.println("Returned caption tracks:");
-//			CaptionSnippet capSnippet;
-			
-			System.out.println("Title: " + snippet.getTitle());
+			/*System.out.println("Title: " + snippet.getTitle());
 			System.out.println("Description: " + snippet.getDescription());
-			System.out.println("Category: " + categorySnippet.getTitle());
+			System.out.println("Category: " + categorySnippet.getTitle());*/
 			
-			/*for(Caption caption:captions) {
-//				capSnippet = caption.getSnippet();
-				downloadCaption(caption.getId(), apiKey);
-//				System.out.println("ID: " + caption.getId());
-//				System.out.println("Name: " + capSnippet.getName());
-//				System.out.println("Language: " + capSnippet.getLanguage());
-			}*/
+			this.title = snippet.getTitle();
+			this.desc = snippet.getDescription();
+			this.category = categorySnippet.getTitle();
 			
 		} catch (GoogleJsonResponseException e) {
         	System.err.println("There was a service error: " + e.getDetails().getCode() + " : " + e.getDetails().getMessage());
@@ -126,14 +129,10 @@ public class GetTitle {
 	private static String getVideoIdFromUser() throws IOException {
 		
 		String videoId = "";
+		//Video ID should only be the string after v=
 		System.out.print("Please enter video id: ");
 		BufferedReader bReader = new BufferedReader(new InputStreamReader(System.in));
 		videoId = bReader.readLine();
-		
-//		if(videoId.length()<1) {
-//			System.out.print("Video Id can't be empty!");
-//			System.exit(1);
-//		}
 		
 		return videoId;
 	}
@@ -145,25 +144,6 @@ public class GetTitle {
 		MediaHttpDownloader downloader = captionDownload.getMediaHttpDownloader();
 		
 		downloader.setDirectDownloadEnabled(false);
-		
-//		MediaHttpDownloaderProgressListener downloadProgressListener = new MediaHttpDownloaderProgressListener() {
-//			@Override
-//			public void progressChanged(MediaHttpDownloader downloader) throws IOException {
-//				switch(downloader.getDownloadState()) {
-//				case MEDIA_IN_PROGRESS:
-//					System.out.println("Download in progress");
-//					System.out.println("Download percentage: " + downloader.getProgress());
-//					break;
-//				case MEDIA_COMPLETE:
-//					System.out.println("Download completed!");
-//					break;
-//				case NOT_STARTED:
-//					System.out.println("Download not started!");
-//					break;
-//				}
-//			}
-//		};
-//		downloader.setProgressListener(downloadProgressListener);
 		
 		OutputStream outputFile = new FileOutputStream("captionFile.srt");
 		captionDownload.setKey(apiKey);
