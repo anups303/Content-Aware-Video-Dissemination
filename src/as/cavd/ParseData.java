@@ -36,7 +36,7 @@ public class ParseData {
 				if(matcher.matches())
 					wordList.add(word);
 			}
-			for(String word:wordList) {
+			for(String word:categoryParsed) {
 				System.out.println(word);
 			}
 		} catch(IOException e) {

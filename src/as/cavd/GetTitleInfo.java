@@ -85,6 +85,7 @@ public class GetTitleInfo {
 			
 			String apiKey = properties.getProperty("youtube.apikey");
 			
+			
 			//prompt for video id
 			//String videoId = getVideoIdFromUser();
 			
@@ -93,16 +94,21 @@ public class GetTitleInfo {
 			listVideosRequest.setKey(apiKey);
 			VideoListResponse listResponse = listVideosRequest.execute();
 			
+//			to check the HTTP request
+//			System.out.println(listVideosRequest.buildHttpRequestUrl().toString());
+			
 			List<Video> videoList = listResponse.getItems();
 			
 			Video video = videoList.get(0);
 			VideoSnippet snippet = video.getSnippet();
 			String categoryId = snippet.getCategoryId();
 			
+//			only category ID retrieved from last req; match ID to actual category name
 			YouTube.VideoCategories.List listCategoriesRequest = youtube.videoCategories().list("snippet").setId(categoryId);
 			listCategoriesRequest.setKey(apiKey);
+			listCategoriesRequest.setFields("items/snippet/title");
+			System.out.println(listCategoriesRequest.buildHttpRequestUrl().toString());
 			VideoCategoryListResponse categoryListResponse = listCategoriesRequest.execute();
-//			System.out.println(categoryListResponse);
 			
 			List<VideoCategory> categoryList = categoryListResponse.getItems();
 			
