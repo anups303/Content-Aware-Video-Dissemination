@@ -107,7 +107,7 @@ public class GetTitleInfo {
 			YouTube.VideoCategories.List listCategoriesRequest = youtube.videoCategories().list("snippet").setId(categoryId);
 			listCategoriesRequest.setKey(apiKey);
 			listCategoriesRequest.setFields("items/snippet/title");
-			System.out.println(listCategoriesRequest.buildHttpRequestUrl().toString());
+//			System.out.println(listCategoriesRequest.buildHttpRequestUrl().toString());
 			VideoCategoryListResponse categoryListResponse = listCategoriesRequest.execute();
 			
 			List<VideoCategory> categoryList = categoryListResponse.getItems();
