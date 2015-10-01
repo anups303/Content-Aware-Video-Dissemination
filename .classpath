@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="D:/Dropbox/Dropbox/TUD/Thesis_topics/Content_Aware_Video_Streaming/Code/jetty-7.0.0.pre5.jar"/>
 	<classpathentry kind="lib" path="D:/Dropbox/Dropbox/TUD/Thesis_topics/Content_Aware_Video_Streaming/Code/jetty-util-7.0.0.pre5.jar"/>
 	<classpathentry kind="lib" path="D:/Dropbox/Dropbox/TUD/Thesis_topics/Content_Aware_Video_Streaming/Code/servlet-api-3.0-alpha-1.jar"/>
+	<classpathentry kind="lib" path="D:/Program Files/Weka-3-6/weka.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
