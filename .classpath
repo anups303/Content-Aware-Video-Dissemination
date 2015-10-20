@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="D:/Dropbox/Dropbox/TUD/Thesis_topics/Content_Aware_Video_Streaming/Code/servlet-api-3.0-alpha-1.jar"/>
 	<classpathentry kind="lib" path="D:/Program Files/Weka-3-6/weka.jar"/>
 	<classpathentry kind="lib" path="D:/Dropbox/Dropbox/TUD/Thesis_topics/Content_Aware_Video_Streaming/Code/weka-dev-3.7.13.jar"/>
+	<classpathentry kind="lib" path="D:/Dropbox/Dropbox/TUD/Thesis_topics/Content_Aware_Video_Streaming/Code/commons-io-2.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
